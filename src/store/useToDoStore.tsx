@@ -7,11 +7,15 @@ export type todoItem = {
 }
 
 interface ITodoStore {
+    inputText: string,
     toDoItems: todoItem[],
-    deleteTodo: (id: number) => void
+    deleteTodo: (id: number) => void,
+    setInputText: (text: string) => void
+    createTodo: (inputText: string) => void
 }
 
 export const useToDoStore = create<ITodoStore>((set) => ({
+    inputText: '',
     toDoItems: [
         {
             id: generateId(),
@@ -34,7 +38,14 @@ export const useToDoStore = create<ITodoStore>((set) => ({
             name: "task 5"
         }
     ],
-    deleteTodo: (id: number) => set((state: ITodoStore) => ({toDoItems: state.toDoItems.filter((item: todoItem) => item.id !== id)}))
+    deleteTodo: (id: number) => set((state: ITodoStore) => ({toDoItems: state.toDoItems.filter((item: todoItem) => item.id !== id)})),
+    setInputText: (text: string) => set(() => ({inputText: text})),
+    createTodo: (inputText: string) => set((state: ITodoStore) => (
+        {
+            toDoItems: inputText ? [...state.toDoItems, {id: generateId(), name: inputText}] : state.toDoItems,
+            inputText: ''
+        }
+    ))
 }))
 
 
