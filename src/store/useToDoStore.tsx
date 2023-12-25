@@ -1,73 +1,62 @@
 import {create} from 'zustand'
 import {generateId} from "../lib/generateId.ts"
+import {initialState} from "./intitialState.ts";
 
-export type todoItem = {
+export type TToDoItem = {
     id: number,
-    name: string
+    name: string,
+    editMode: boolean
 }
 
 interface ITodoStore {
     inputText: string,
-    toDoItems: todoItem[],
+    toDoItems: TToDoItem[],
     deleteTodo: (id: number) => void,
     setInputText: (text: string) => void
-    createTodo: (inputText: string) => void
+    createTodo: (inputText: string) => void,
+    setEditTodoMode: (id: number) => void,
+    disableTodo: (id: number) => void,
+    setInputItemText: (text: string, id: number) => void
 }
 
 export const useToDoStore = create<ITodoStore>((set) => ({
     inputText: '',
-    toDoItems: [
+    toDoItems: initialState,
+    deleteTodo: (id: number) => set((state: ITodoStore) => (
+        {toDoItems: state.toDoItems.filter((item: TToDoItem) => item.id !== id)}
+    )),
+    setInputText: (text: string) => set(() => (
+        {inputText: text}
+    )),
+    setInputItemText: (text: string, id: number) => set((state: ITodoStore) => (
         {
-            id: generateId(),
-            name: "task 1"
-        },
-        {
-            id: generateId(),
-            name: "task 2"
-        },
-        {
-            id: generateId(),
-            name: "task 3"
-        },
-        {
-            id: generateId(),
-            name: "task 4"
-        },
-        {
-            id: generateId(),
-            name: "task 5"
+            toDoItems: state.toDoItems.map((item: TToDoItem) => (
+                item.id !== id
+                    ? item
+                    : {...item, name: text}
+            ))
         }
-    ],
-    deleteTodo: (id: number) => set((state: ITodoStore) => ({toDoItems: state.toDoItems.filter((item: todoItem) => item.id !== id)})),
-    setInputText: (text: string) => set(() => ({inputText: text})),
+    )),
     createTodo: (inputText: string) => set((state: ITodoStore) => (
         {
-            toDoItems: inputText ? [...state.toDoItems, {id: generateId(), name: inputText}] : state.toDoItems,
+            toDoItems: inputText ? [...state.toDoItems, {id: generateId(), name: inputText, editMode: false}] : state.toDoItems,
             inputText: ''
         }
-    ))
+    )),
+    setEditTodoMode: (id: number) => set((state: ITodoStore) => (
+        {
+            toDoItems: state.toDoItems.map((item: TToDoItem) => (
+                item.id !== id
+                ? {...item, editMode: false}
+                : {...item, editMode: true}
+            ))
+        }
+    )),
+    disableTodo: (id: number) => set((state: ITodoStore) => ({
+        toDoItems: state.toDoItems.map((item: TToDoItem) => (
+            item.id !== id
+            ? item
+            : {...item, editMode: false}
+        ))
+    }))
 }))
-
-
-// todoItems: [
-//     {
-//         id: generateId(),
-//         name: "task 1"
-//     },
-//     {
-//         id: generateId(),
-//         name: "task 1"
-//     },
-//     {
-//         id: generateId(),
-//         name: "task 1"
-//     },
-//     {
-//         id: generateId(),
-//         name: "task 1"
-//     },
-//     {
-//         id: generateId(),
-//         name: "task 1"
-//     }
-// ]

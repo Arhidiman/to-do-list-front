@@ -9,3 +9,9 @@ body {
   text-align: center;
 }
 
+.ant-input-disabled {
+  background: lightgrey !important;
+  border: none;
+  color: black !important
+}
+
