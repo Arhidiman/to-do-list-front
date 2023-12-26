@@ -17,9 +17,13 @@ function DoneTasks() {
     }
 
     return (
-        <div className='done-tasks'>
-            {doneTodos.map(doneTodo)}
+        <div>
+            <h2 className='done-tasks__title'>Done tasks</h2>
+            <div className='done-tasks'>
+                {doneTodos.map(doneTodo)}
+            </div>
         </div>
+
     )
 
 }

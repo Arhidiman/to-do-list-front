@@ -25,12 +25,15 @@ function CurrentTasks() {
     }
 
     return (
-        <div className='current-tasks'>
-            <div className='current-tasks__create'>
-                <Input onChange={setCurrentText} placeholder='Введите задачу' value={inputText}/>
-                <ActionButton actionHandler={() => createTodo(inputText)} type='add'/>
+        <div>
+            <h2 className='current-tasks__title'>Tasks to do</h2>
+            <div className='current-tasks'>
+                <div className='current-tasks__create'>
+                    <Input onChange={setCurrentText} placeholder='Введите задачу' value={inputText}/>
+                    <ActionButton actionHandler={() => createTodo(inputText)} type='add'/>
+                </div>
+                {toDoItems.map(toDoItem)}
             </div>
-            {toDoItems.map(toDoItem)}
         </div>
     )
 }
