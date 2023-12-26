@@ -13,7 +13,8 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
         deleteTodo,
         setInputItemText,
         setEditTodoMode,
-        disableTodo
+        disableTodo,
+        completeTodo
     } = useToDoStore()
 
     const setItemText = (e: SyntheticEvent<HTMLInputElement>, id: number) => {
@@ -32,6 +33,7 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
             case false: return 'edit'
         }
     }
+    const deleteToDoItem = () => deleteTodo(id)
 
     console.log(inputText, toDoItems)
 
@@ -43,8 +45,9 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
                     disabled={!editMode}
                 />
                 <div className='task-actions'>
+                    <ActionButton actionHandler={() => completeTodo(id)} type='complete'/>
                     <ActionButton actionHandler={getActionHandler(editMode)} type={getActionType(editMode)}/>
-                    <ActionButton actionHandler={() => deleteTodo(id)} type='delete'/>
+                    <ActionButton actionHandler={deleteToDoItem} type='delete'/>
                 </div>
         </div>
     )

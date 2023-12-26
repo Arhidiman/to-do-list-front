@@ -11,17 +11,20 @@ export type TToDoItem = {
 interface ITodoStore {
     inputText: string,
     toDoItems: TToDoItem[],
+    doneTodos: TToDoItem[],
     deleteTodo: (id: number) => void,
     setInputText: (text: string) => void
     createTodo: (inputText: string) => void,
     setEditTodoMode: (id: number) => void,
     disableTodo: (id: number) => void,
-    setInputItemText: (text: string, id: number) => void
+    setInputItemText: (text: string, id: number) => void,
+    completeTodo: (id: number) => void
 }
 
-export const useToDoStore = create<ITodoStore>((set) => ({
+export const useToDoStore = create<ITodoStore>((set, get) => ({
     inputText: '',
     toDoItems: initialState,
+    doneTodos: [],
     deleteTodo: (id: number) => set((state: ITodoStore) => (
         {toDoItems: state.toDoItems.filter((item: TToDoItem) => item.id !== id)}
     )),
@@ -58,5 +61,15 @@ export const useToDoStore = create<ITodoStore>((set) => ({
             ? item
             : {...item, editMode: false}
         ))
-    }))
+    })),
+    completeTodo: (id: number) => {
+        const {deleteTodo, toDoItems} = get()
+        const completedTodo = toDoItems.find((item: TToDoItem) => item.id === id)
+        set((state: ITodoStore) => (
+            {
+                doneTodos: completedTodo ? [...state.doneTodos, completedTodo] : [...state.doneTodos]
+            }
+        ))
+        deleteTodo(id)
+    }
 }))
