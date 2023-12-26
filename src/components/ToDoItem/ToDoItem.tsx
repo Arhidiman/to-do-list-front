@@ -3,6 +3,7 @@ import {useToDoStore} from "../../store/useToDoStore.tsx";
 import ActionButton from "../ActionButton/ActionButton.tsx";
 import type {TToDoItem} from "../../store/useToDoStore.tsx";
 import type {SyntheticEvent} from "react";
+import './ToDoItem.scss'
 
 function ToDoItem({id, name, editMode}: TToDoItem) {
 
@@ -35,7 +36,7 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
     console.log(inputText, toDoItems)
 
     return (
-        <div key={id} className='current-tasks__item'>
+        <div key={id} className='to-do-item'>
                 <Input
                     onChange={(e) => setItemText(e, id)}
                     value={name}
