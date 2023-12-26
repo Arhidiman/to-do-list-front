@@ -1,14 +1,18 @@
 
-import {useToDoStore} from "../../store/useToDoStore.tsx";
-import DoneToDo from "../DoneToDo/DoneToDo.tsx";
-import type {TToDoItem} from "../../store/useToDoStore.tsx";
+import {shallow} from "zustand/shallow"
+import {useToDoStore} from "../../store/useToDoStore.tsx"
+import DoneToDo from "../DoneToDo/DoneToDo.tsx"
+import type {TToDoItem} from "../../store/useToDoStore.tsx"
 import './DoneTasks.scss'
 
 function DoneTasks() {
+    console.log("DONE tasks render")
 
-    const {
+    const [
         doneTodos
-    } = useToDoStore()
+    ] = useToDoStore((state) => [
+        state.doneTodos
+    ], shallow)
 
     const doneTodo = (todo: TToDoItem) => {
         return (

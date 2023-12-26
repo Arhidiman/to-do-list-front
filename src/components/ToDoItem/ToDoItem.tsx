@@ -8,8 +8,6 @@ import './ToDoItem.scss'
 function ToDoItem({id, name, editMode}: TToDoItem) {
 
     const {
-        toDoItems,
-        inputText,
         deleteTodo,
         setInputItemText,
         setEditTodoMode,
@@ -35,8 +33,6 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
     }
     const deleteToDoItem = () => deleteTodo(id)
 
-    console.log(inputText, toDoItems)
-
     return (
         <div key={id} className='to-do-item'>
                 <Input
@@ -51,7 +47,6 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
                 </div>
         </div>
     )
-
 }
 
 export default ToDoItem

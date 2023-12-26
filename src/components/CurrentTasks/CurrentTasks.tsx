@@ -1,25 +1,34 @@
 import {Input} from "antd";
 import {useToDoStore} from "../../store/useToDoStore.tsx";
+import { useShallow } from 'zustand/react/shallow'
 import ToDoItem from "../ToDoItem/ToDoItem.tsx";
 import ActionButton from "../ActionButton/ActionButton.tsx";
+import {shallow} from "zustand/shallow";
 import type {TToDoItem} from "../../store/useToDoStore.tsx";
 import type {SyntheticEvent} from "react";
 import "./CurrentTasks.scss"
 
 function CurrentTasks() {
+    console.log("CURRENT tasks render")
 
     const {
         toDoItems,
         inputText,
         setInputText,
         createTodo,
-    } = useToDoStore()
+    } = useToDoStore(
+        useShallow((state) => ({
+            toDoItems: state.toDoItems,
+            inputText: state.inputText,
+            setInputText: state.setInputText,
+            createTodo: state.createTodo,
+        }))
+    )
 
     const setCurrentText = (e: SyntheticEvent<HTMLInputElement>) => {
         setInputText((e.target as HTMLInputElement).value)
     }
 
-    console.log(inputText, toDoItems)
     const toDoItem = (item: TToDoItem) => {
         return <ToDoItem id={item.id} name={item.name} editMode={item.editMode}/>
     }
