@@ -1,4 +1,4 @@
-import {generateId} from "../lib/generateId.ts";
+import {generateId} from "../../lib/generateId.ts";
 
 export const initialState = [
     {

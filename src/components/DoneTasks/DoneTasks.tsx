@@ -1,8 +1,8 @@
 
 import {shallow} from "zustand/shallow"
-import {useToDoStore} from "../../store/useToDoStore.tsx"
+import {useToDoStore} from "../../store/toDoStore/useToDoStore.ts"
 import DoneToDo from "../DoneToDo/DoneToDo.tsx"
-import type {TToDoItem} from "../../store/useToDoStore.tsx"
+import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts"
 import './DoneTasks.scss'
 
 function DoneTasks() {
@@ -13,6 +13,7 @@ function DoneTasks() {
     ] = useToDoStore((state) => [
         state.doneTodos
     ], shallow)
+
 
     const doneTodo = (todo: TToDoItem) => {
         return (

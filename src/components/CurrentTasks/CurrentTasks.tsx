@@ -1,10 +1,9 @@
 import {Input} from "antd";
-import {useToDoStore} from "../../store/useToDoStore.tsx";
+import {useToDoStore} from "../../store/toDoStore/useToDoStore.ts";
 import { useShallow } from 'zustand/react/shallow'
 import ToDoItem from "../ToDoItem/ToDoItem.tsx";
 import ActionButton from "../ActionButton/ActionButton.tsx";
-import {shallow} from "zustand/shallow";
-import type {TToDoItem} from "../../store/useToDoStore.tsx";
+import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import "./CurrentTasks.scss"
 

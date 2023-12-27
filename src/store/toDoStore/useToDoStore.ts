@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {generateId} from "../lib/generateId.ts"
+import {generateId} from "../../lib/generateId.ts"
 import {initialState} from "./intitialState.ts";
 
 export type TToDoItem = {

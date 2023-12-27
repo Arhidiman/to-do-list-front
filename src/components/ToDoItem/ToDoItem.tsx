@@ -1,7 +1,7 @@
 import {Input} from "antd";
-import {useToDoStore} from "../../store/useToDoStore.tsx";
+import {useToDoStore} from "../../store/toDoStore/useToDoStore.ts";
 import ActionButton from "../ActionButton/ActionButton.tsx";
-import type {TToDoItem} from "../../store/useToDoStore.tsx";
+import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import './ToDoItem.scss'
 
