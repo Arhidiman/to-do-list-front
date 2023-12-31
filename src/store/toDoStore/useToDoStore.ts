@@ -1,6 +1,8 @@
 import {create} from 'zustand'
 import {generateId} from "../../lib/generateId.ts"
 import {initialState} from "./intitialState.ts";
+import axios from "axios";
+import {TODOS_URL} from "../../constants/urls.ts";
 
 export type TToDoItem = {
     id: number,
@@ -18,7 +20,8 @@ interface ITodoStore {
     setEditTodoMode: (id: number) => void,
     disableTodo: (id: number) => void,
     setInputItemText: (text: string, id: number) => void,
-    completeTodo: (id: number) => void
+    completeTodo: (id: number) => void,
+    getAllTodos: () => void
 }
 
 export const useToDoStore = create<ITodoStore>((set, get) => ({
@@ -71,5 +74,12 @@ export const useToDoStore = create<ITodoStore>((set, get) => ({
             }
         ))
         deleteTodo(id)
+    },
+    getAllTodos: async () => {
+        const todos = await axios(TODOS_URL)
+        console.log(todos)
+        set({
+            toDoItems: todos.data.data
+        })
     }
 }))
