@@ -3,27 +3,27 @@ import {generateId} from "../../lib/generateId.ts";
 export const initialState = [
     {
         id: generateId(),
-        name: "task 1",
+        text: "task 1",
         editMode: false
     },
     {
         id: generateId(),
-        name: "task 2",
+        text: "task 2",
         editMode: false
     },
     {
         id: generateId(),
-        name: "task 3",
+        text: "task 3",
         editMode: false
     },
     {
         id: generateId(),
-        name: "task 4",
+        text: "task 4",
         editMode: false
     },
     {
         id: generateId(),
-        name: "task 5",
+        text: "task 5",
         editMode: false
     }
 ]

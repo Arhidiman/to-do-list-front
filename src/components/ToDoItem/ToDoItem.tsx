@@ -5,7 +5,9 @@ import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import './ToDoItem.scss'
 
-function ToDoItem({id, name, editMode}: TToDoItem) {
+function ToDoItem({_id, text, editMode}: TToDoItem) {
+
+    console.log(_id)
 
     const {
         deleteTodo,
@@ -15,14 +17,14 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
         completeTodo
     } = useToDoStore()
 
-    const setItemText = (e: SyntheticEvent<HTMLInputElement>, id: number) => {
-        setInputItemText((e.target as HTMLInputElement).value, id)
+    const setItemText = (e: SyntheticEvent<HTMLInputElement>, _id: number) => {
+        setInputItemText((e.target as HTMLInputElement).value, _id)
     }
 
     const getActionHandler = (editMode: boolean) => {
         switch (editMode) {
-            case true: return () => disableTodo(id)
-            case false: return () => setEditTodoMode(id)
+            case true: return () => disableTodo(_id)
+            case false: return () => setEditTodoMode(_id)
         }
     }
     const getActionType = (editMode: boolean) => {
@@ -31,17 +33,17 @@ function ToDoItem({id, name, editMode}: TToDoItem) {
             case false: return 'edit'
         }
     }
-    const deleteToDoItem = () => deleteTodo(id)
+    const deleteToDoItem = () => deleteTodo(_id)
 
     return (
-        <div key={id} className='to-do-item'>
+        <div key={_id} className='to-do-item'>
                 <Input
-                    onChange={(e) => setItemText(e, id)}
-                    value={name}
+                    onChange={(e) => setItemText(e, _id)}
+                    value={text}
                     disabled={!editMode}
                 />
                 <div className='task-actions'>
-                    <ActionButton actionHandler={() => completeTodo(id)} type='complete'/>
+                    <ActionButton actionHandler={() => completeTodo(_id)} type='complete'/>
                     <ActionButton actionHandler={getActionHandler(editMode)} type={getActionType(editMode)}/>
                     <ActionButton actionHandler={deleteToDoItem} type='delete'/>
                 </div>

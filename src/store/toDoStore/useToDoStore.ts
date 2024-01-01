@@ -1,85 +1,87 @@
 import {create} from 'zustand'
+import {devtools} from "zustand/middleware";
 import {generateId} from "../../lib/generateId.ts"
-import {initialState} from "./intitialState.ts";
 import axios from "axios";
-import {TODOS_URL} from "../../constants/urls.ts";
+import {BASE_URL, TODOS_URL} from "../../constants/urls.ts";
 
 export type TToDoItem = {
-    id: number,
-    name: string,
+    _id: number,
+    text: string,
     editMode: boolean
 }
 
 interface ITodoStore {
     inputText: string,
-    toDoItems: TToDoItem[],
+    toDoItems: TToDoItem[] | [],
     doneTodos: TToDoItem[],
-    deleteTodo: (id: number) => void,
+    deleteTodo: (_id: number) => void,
     setInputText: (text: string) => void
     createTodo: (inputText: string) => void,
-    setEditTodoMode: (id: number) => void,
-    disableTodo: (id: number) => void,
-    setInputItemText: (text: string, id: number) => void,
-    completeTodo: (id: number) => void,
+    setEditTodoMode: (_id: number) => void,
+    disableTodo: (_id: number) => void,
+    setInputItemText: (text: string, _id: number) => void,
+    completeTodo: (_id: number) => void,
     getAllTodos: () => void
 }
 
-export const useToDoStore = create<ITodoStore>((set, get) => ({
+export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
     inputText: '',
-    toDoItems: initialState,
+    toDoItems: [],
     doneTodos: [],
-    deleteTodo: (id: number) => set((state: ITodoStore) => (
-        {toDoItems: state.toDoItems.filter((item: TToDoItem) => item.id !== id)}
+    deleteTodo: (_id: number) => set((state: ITodoStore) => (
+        {toDoItems: state.toDoItems.filter((item: TToDoItem) => item._id !== _id)}
     )),
     setInputText: (text: string) => set(() => (
         {inputText: text}
     )),
-    setInputItemText: (text: string, id: number) => set((state: ITodoStore) => (
+    setInputItemText: (text: string, _id: number) => set((state: ITodoStore) => (
         {
             toDoItems: state.toDoItems.map((item: TToDoItem) => (
-                item.id !== id
+                item._id !== _id
                     ? item
-                    : {...item, name: text}
+                    : {...item, text: text}
             ))
         }
     )),
     createTodo: (inputText: string) => set((state: ITodoStore) => (
         {
-            toDoItems: inputText ? [...state.toDoItems, {id: generateId(), name: inputText, editMode: false}] : state.toDoItems,
+            toDoItems: inputText ? [...state.toDoItems, {_id: generateId(), text: inputText, editMode: false}] : state.toDoItems,
             inputText: ''
         }
     )),
-    setEditTodoMode: (id: number) => set((state: ITodoStore) => (
-        {
+    setEditTodoMode: (_id: number) => set((state: ITodoStore) => {
+        console.log(_id)
+        return {
             toDoItems: state.toDoItems.map((item: TToDoItem) => (
-                item.id !== id
-                ? {...item, editMode: false}
-                : {...item, editMode: true}
+                item._id !== _id
+                    ? {...item, editMode: false}
+                    : {...item, editMode: true}
             ))
         }
-    )),
-    disableTodo: (id: number) => set((state: ITodoStore) => ({
+    }),
+    disableTodo: (_id: number) => set((state: ITodoStore) => ({
         toDoItems: state.toDoItems.map((item: TToDoItem) => (
-            item.id !== id
+            item._id !== _id
             ? item
             : {...item, editMode: false}
         ))
     })),
-    completeTodo: (id: number) => {
+    completeTodo: (_id: number) => {
         const {deleteTodo, toDoItems} = get()
-        const completedTodo = toDoItems.find((item: TToDoItem) => item.id === id)
+        const completedTodo = toDoItems.find((item: TToDoItem) => item._id === _id)
         set((state: ITodoStore) => (
             {
                 doneTodos: completedTodo ? [...state.doneTodos, completedTodo] : [...state.doneTodos]
             }
         ))
-        deleteTodo(id)
+        deleteTodo(_id)
     },
     getAllTodos: async () => {
-        const todos = await axios(TODOS_URL)
-        console.log(todos)
+        const todos = await axios(BASE_URL+TODOS_URL)
         set({
-            toDoItems: todos.data.data
+            toDoItems: todos.data.map((todo: TToDoItem) => {
+                return {...todo, editMode: false}
+            })
         })
     }
-}))
+})))

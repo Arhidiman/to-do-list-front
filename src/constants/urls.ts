@@ -1,1 +1,3 @@
-export const TODOS_URL = 'https://fakerapi.it/api/v1/users?_quantity=10&_gender=male'
+export const BASE_URL = 'http://localhost:5000'
+export const TODOS_URL = '/api/todos'
+

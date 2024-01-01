@@ -17,7 +17,7 @@ function DoneTasks() {
 
     const doneTodo = (todo: TToDoItem) => {
         return (
-            <DoneToDo key={todo.id} name={todo.name}/>
+            <DoneToDo key={todo.id} text={todo.text}/>
         )
     }
 
