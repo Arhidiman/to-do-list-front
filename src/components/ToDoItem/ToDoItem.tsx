@@ -7,14 +7,12 @@ import './ToDoItem.scss'
 
 function ToDoItem({_id, text, editMode}: TToDoItem) {
 
-    console.log(_id)
-
     const {
-        deleteTodo,
         setInputItemText,
         setEditTodoMode,
         disableTodo,
-        completeTodo
+        completeTodo,
+        deleteTodoById
     } = useToDoStore()
 
     const setItemText = (e: SyntheticEvent<HTMLInputElement>, _id: number) => {
@@ -33,7 +31,7 @@ function ToDoItem({_id, text, editMode}: TToDoItem) {
             case false: return 'edit'
         }
     }
-    const deleteToDoItem = () => deleteTodo(_id)
+    const deleteToDoItem = () => deleteTodoById(_id)
 
     return (
         <div key={_id} className='to-do-item'>

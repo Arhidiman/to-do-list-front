@@ -31,7 +31,6 @@ function CurrentTasks() {
 
     const toDoItem = (item: TToDoItem) => {
         return <ToDoItem _id={item._id} text={item.text} editMode={item.editMode}/>
-        // return <ToDoItem id={item.id} text={item.text || 'name'} editMode={false}/> //TODO получить данные с реального API
     }
 
     useEffect(() => {

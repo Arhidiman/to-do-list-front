@@ -1,7 +1,8 @@
 import {create} from 'zustand'
+import axios, {AxiosError} from "axios";
+import {notification} from "antd";
 import {devtools} from "zustand/middleware";
 import {generateId} from "../../lib/generateId.ts"
-import axios from "axios";
 import {BASE_URL, TODOS_URL} from "../../constants/urls.ts";
 
 export type TToDoItem = {
@@ -21,7 +22,8 @@ interface ITodoStore {
     disableTodo: (_id: number) => void,
     setInputItemText: (text: string, _id: number) => void,
     completeTodo: (_id: number) => void,
-    getAllTodos: () => void
+    getAllTodos: () => void,
+    deleteTodoById: (_id: string | number) => void
 }
 
 export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
@@ -83,5 +85,23 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
                 return {...todo, editMode: false}
             })
         })
+    },
+    deleteTodoById: async (_id: string | number) => {
+        console.log(_id)
+        try {
+            const data = await axios.delete(`${BASE_URL+TODOS_URL}/${_id}`)
+            set((state: ITodoStore) => (
+                {toDoItems: state.toDoItems.filter((item: TToDoItem) => item._id !== _id)}
+            ))
+            notification.success({
+                message: data.data
+            })
+        } catch (error: any) {
+            console.log(error)
+            notification.error({
+                message: error.message
+            })
+        }
+
     }
 })))
