@@ -45,12 +45,25 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             ))
         }
     )),
-    createTodo: (inputText: string) => set((state: ITodoStore) => (
-        {
-            toDoItems: inputText ? [...state.toDoItems, {_id: generateId(), text: inputText, editMode: false}] : state.toDoItems,
-            inputText: ''
+    createTodo: async (inputText: string) => {
+        try {
+            await axios.post(BASE_URL+TODOS_URL, {author: 'Dimon', text: inputText})
+            set((state: ITodoStore) => {
+                return {
+                    toDoItems: inputText ? [...state.toDoItems, {_id: generateId(), text: inputText, editMode: false}] : state.toDoItems,
+                    inputText: ''
+                }
+            })
+            notification.success({
+                message: 'New todo created successfully'
+            })
+
+        } catch (error: any) {
+            notification.error({
+                message: error.message
+            })
         }
-    )),
+    },
     setEditTodoMode: (_id: number) => set((state: ITodoStore) => {
         console.log(_id)
         return {
