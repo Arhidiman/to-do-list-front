@@ -1,11 +1,11 @@
 
 import {shallow} from "zustand/shallow"
-import {useToDoStore} from "../../store/toDoStore/useToDoStore.ts"
-import DoneToDo from "../DoneToDo/DoneToDo.tsx"
-import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts"
+import {useToDoStore} from "../../CurrentTasks/store/useToDoStore.ts"
+import DoneToDo from "../../../components/DoneToDo/DoneToDo.tsx"
+import type {TToDoItem} from "../../CurrentTasks/store/useToDoStore.ts"
 import './DoneTasks.scss'
 
-function DoneTasks() {
+export function DoneTasks() {
     console.log("DONE tasks render")
 
     const [
@@ -17,7 +17,7 @@ function DoneTasks() {
 
     const doneTodo = (todo: TToDoItem) => {
         return (
-            <DoneToDo key={todo.id} text={todo.text}/>
+            <DoneToDo key={todo._id} text={todo.text}/>
         )
     }
 
@@ -30,7 +30,4 @@ function DoneTasks() {
         </div>
 
     )
-
 }
-
-export default DoneTasks

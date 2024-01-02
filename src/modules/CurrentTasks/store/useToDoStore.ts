@@ -2,8 +2,7 @@ import {create} from 'zustand'
 import axios from "axios";
 import {notification} from "antd";
 import {devtools} from "zustand/middleware";
-import {generateId} from "../../lib/generateId.ts"
-import {BASE_URL, TODOS_URL} from "../../constants/urls.ts";
+import {BASE_URL, TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
 
 export type TToDoItem = {
     _id: number,
@@ -47,10 +46,10 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
     )),
     createTodo: async (inputText: string) => {
         try {
-            await axios.post(BASE_URL+TODOS_URL, {author: 'Dimon', text: inputText})
+            const todo = await axios.post(BASE_URL+TODOS_URL, {author: 'Dimon', text: inputText})
             set((state: ITodoStore) => {
                 return {
-                    toDoItems: inputText ? [...state.toDoItems, {_id: generateId(), text: inputText, editMode: false}] : state.toDoItems,
+                    toDoItems: inputText ? [...state.toDoItems, {text: inputText, _id: todo.data._id, editMode: false}] : state.toDoItems,
                     inputText: ''
                 }
             })

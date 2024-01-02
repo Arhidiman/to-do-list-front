@@ -1,14 +1,14 @@
 import {useEffect} from "react"
 import {Input} from "antd";
-import {useToDoStore} from "../../store/toDoStore/useToDoStore.ts";
+import {useToDoStore} from "../store/useToDoStore.ts";
 import { useShallow } from 'zustand/react/shallow'
-import ToDoItem from "../ToDoItem/ToDoItem.tsx";
-import ActionButton from "../ActionButton/ActionButton.tsx";
-import type {TToDoItem} from "../../store/toDoStore/useToDoStore.ts";
+import ToDoItem from "../../../components/ToDoItem/ToDoItem.tsx";
+import ActionButton from "@/UI/ActionButton/ActionButton.tsx";
+import type {TToDoItem} from "../store/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import "./CurrentTasks.scss"
 
-function CurrentTasks() {
+export function CurrentTasks() {
     const {
         toDoItems,
         inputText,
@@ -50,5 +50,3 @@ function CurrentTasks() {
         </div>
     )
 }
-
-export default CurrentTasks
