@@ -10,7 +10,7 @@ function ToDoItem({_id, text, editMode}: TToDoItem) {
     const {
         setInputItemText,
         setEditTodoMode,
-        disableTodo,
+        disableAndUpdateTodo,
         completeTodo,
         deleteTodoById
     } = useToDoStore()
@@ -21,7 +21,7 @@ function ToDoItem({_id, text, editMode}: TToDoItem) {
 
     const getActionHandler = (editMode: boolean) => {
         switch (editMode) {
-            case true: return () => disableTodo(_id)
+            case true: return () => disableAndUpdateTodo(_id, text)
             case false: return () => setEditTodoMode(_id)
         }
     }

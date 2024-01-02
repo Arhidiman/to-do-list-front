@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import axios, {AxiosError} from "axios";
+import axios from "axios";
 import {notification} from "antd";
 import {devtools} from "zustand/middleware";
 import {generateId} from "../../lib/generateId.ts"
@@ -19,7 +19,7 @@ interface ITodoStore {
     setInputText: (text: string) => void
     createTodo: (inputText: string) => void,
     setEditTodoMode: (_id: number) => void,
-    disableTodo: (_id: number) => void,
+    disableAndUpdateTodo: (_id: number, text: string) => void,
     setInputItemText: (text: string, _id: number) => void,
     completeTodo: (_id: number) => void,
     getAllTodos: () => void,
@@ -74,13 +74,28 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             ))
         }
     }),
-    disableTodo: (_id: number) => set((state: ITodoStore) => ({
-        toDoItems: state.toDoItems.map((item: TToDoItem) => (
-            item._id !== _id
-            ? item
-            : {...item, editMode: false}
-        ))
-    })),
+    disableAndUpdateTodo: async (_id: number, text: string) => {
+        try {
+            const data = await axios.put(BASE_URL+TODOS_URL, {_id: _id, text: text})
+            set((state: ITodoStore) => {
+                return {
+                    toDoItems: state.toDoItems.map((item: TToDoItem) => (
+                        item._id !== _id
+                            ? item
+                            : {...item, editMode: false}
+                    ))
+                }
+            })
+            notification.success({
+                message: data.data
+            })
+        } catch (error: any) {
+            notification.error({
+                message: error.message
+            })
+        }
+
+    },
     completeTodo: (_id: number) => {
         const {deleteTodo, toDoItems} = get()
         const completedTodo = toDoItems.find((item: TToDoItem) => item._id === _id)
