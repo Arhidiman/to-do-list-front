@@ -1,25 +1,26 @@
 
-import {shallow} from "zustand/shallow"
-import {useToDoStore} from "../../CurrentTasks/store/useToDoStore.ts"
+import {useDoneToDoStore} from "@/modules/DoneTasks/store/useDoneTodoStore.ts";
 import DoneToDo from "../../../components/DoneToDo/DoneToDo.tsx"
-import type {TToDoItem} from "../../CurrentTasks/store/useToDoStore.ts"
+import {useEffect} from "react";
+import {TDoneTodoItem} from "@/modules/DoneTasks/store/useDoneTodoStore.ts";
 import './DoneTasks.scss'
 
 export function DoneTasks() {
     console.log("DONE tasks render")
 
-    const [
-        doneTodos
-    ] = useToDoStore((state) => [
-        state.doneTodos
-    ], shallow)
-
-
-    const doneTodo = (todo: TToDoItem) => {
+    const {
+        doneTodos,
+        getAllDoneTodos,
+    } = useDoneToDoStore()
+    const doneTodo = (todo: TDoneTodoItem) => {
         return (
             <DoneToDo key={todo._id} text={todo.text}/>
         )
     }
+
+    useEffect(() => {
+        getAllDoneTodos()
+    }, []);
 
     return (
         <div>

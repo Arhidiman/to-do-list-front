@@ -13,25 +13,18 @@ export type TToDoItem = {
 interface ITodoStore {
     inputText: string,
     toDoItems: TToDoItem[] | [],
-    doneTodos: TToDoItem[],
-    deleteTodo: (_id: string) => void,
     setInputText: (text: string) => void
     createTodo: (inputText: string) => void,
     setEditTodoMode: (_id: string) => void,
     disableAndUpdateTodo: (_id: string, text: string) => void,
     setInputItemText: (text: string, _id: string) => void,
-    completeTodo: (_id: string) => void,
     getAllTodos: () => void,
-    deleteTodoById: (_id: string) => void
+    deleteTodoById: (_id: string, message: boolean) => void
 }
 
-export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
+export const useToDoStore = create(devtools<ITodoStore>((set) => ({
     inputText: '',
     toDoItems: [],
-    doneTodos: [],
-    deleteTodo: (_id: string) => set((state: ITodoStore) => (
-        {toDoItems: state.toDoItems.filter((item: TToDoItem) => item._id !== _id)}
-    )),
     setInputText: (text: string) => set(() => (
         {inputText: text}
     )),
@@ -98,17 +91,6 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
                 })
             }
         }
-
-    },
-    completeTodo: (_id: string) => {
-        const {deleteTodo, toDoItems} = get()
-        const completedTodo = toDoItems.find((item: TToDoItem) => item._id === _id)
-        set((state: ITodoStore) => (
-            {
-                doneTodos: completedTodo ? [...state.doneTodos, completedTodo] : [...state.doneTodos]
-            }
-        ))
-        deleteTodo(_id)
     },
     getAllTodos: async () => {
         const todos = await axios(BASE_URL+TODOS_URL)
@@ -118,14 +100,14 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             })
         })
     },
-    deleteTodoById: async (_id: string) => {
+    deleteTodoById: async (_id: string, message: boolean) => {
         console.log(_id)
         try {
             const data = await axios.delete(`${BASE_URL+TODOS_URL}/${_id}`)
             set((state: ITodoStore) => (
                 {toDoItems: state.toDoItems.filter((item: TToDoItem) => item._id !== _id)}
             ))
-            notification.success({
+            message && notification.success({
                 message: data.data
             })
         } catch (error) {

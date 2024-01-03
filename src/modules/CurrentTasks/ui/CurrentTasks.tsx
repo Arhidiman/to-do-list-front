@@ -41,7 +41,7 @@ export function CurrentTasks() {
     }
 
     const deleteTodo = () => {
-        deleteTodoById(todoId)
+        deleteTodoById(todoId, true)
         setIsModalOpen(false)
     }
 
@@ -58,7 +58,7 @@ export function CurrentTasks() {
         getAllTodos()
     }, [])
 
-    console.log('isModalOpen', isModalOpen)
+    console.log('toDoItems', toDoItems)
 
     return (
         <>
@@ -75,7 +75,7 @@ export function CurrentTasks() {
             <Modal
                 confirmHandler={deleteTodo}
                 cancelHandler={() => setIsModalOpen(false)}
-                title={'Подтвердите действие'}
+                title={'Подтвердите удаление задачи'}
                 isOpen={isModalOpen}
             />
         </>

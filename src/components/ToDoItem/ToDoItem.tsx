@@ -1,11 +1,11 @@
 import {Input} from "antd";
 import {useToDoStore} from "@/modules/CurrentTasks/store/useToDoStore.ts";
+import {useDoneToDoStore} from "@/modules/DoneTasks/store/useDoneTodoStore.ts";
 import ActionButton from "@/UI/ActionButton/ActionButton.tsx";
 import type {TToDoItem} from "@/modules/CurrentTasks/store/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
-import './ToDoItem.scss'
 import {MouseEventHandler} from "react";
-
+import './ToDoItem.scss'
 
 type TTodoItemComponent = TToDoItem & {
     confirmDeletion: MouseEventHandler<HTMLElement>
@@ -14,11 +14,19 @@ type TTodoItemComponent = TToDoItem & {
 function ToDoItem({_id, text, editMode, confirmDeletion}: TTodoItemComponent) {
 
     const {
+        deleteTodoById,
         setInputItemText,
         setEditTodoMode,
         disableAndUpdateTodo,
-        completeTodo,
     } = useToDoStore()
+
+    const {createDoneTodo} = useDoneToDoStore()
+
+
+    const completeTodo = (_id: string, text: string) => {
+        deleteTodoById(_id, false)
+        createDoneTodo(text)
+    }
 
     const setItemText = (e: SyntheticEvent<HTMLInputElement>, _id: string) => {
         setInputItemText((e.target as HTMLInputElement).value, _id)
@@ -45,7 +53,7 @@ function ToDoItem({_id, text, editMode, confirmDeletion}: TTodoItemComponent) {
                     disabled={!editMode}
                 />
                 <div className='task-actions'>
-                    <ActionButton actionHandler={() => completeTodo(_id)} type='complete'/>
+                    <ActionButton actionHandler={() => completeTodo(_id, text)} type='complete'/>
                     <ActionButton actionHandler={getActionHandler(editMode)} type={getActionType(editMode)}/>
                     <ActionButton actionHandler={confirmDeletion} type='delete'/>
                 </div>
