@@ -22,7 +22,6 @@ function ToDoItem({_id, text, editMode, confirmDeletion}: TTodoItemComponent) {
 
     const {createDoneTodo} = useDoneToDoStore()
 
-
     const completeTodo = (_id: string, text: string) => {
         deleteTodoById(_id, false)
         createDoneTodo(text)

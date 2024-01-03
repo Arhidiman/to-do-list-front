@@ -1,14 +1,16 @@
 import {PlusOutlined, EditOutlined, CheckOutlined, DeleteOutlined, ArrowDownOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import {MouseEventHandler} from "react";
-
+import type {MouseEventHandler} from "react";
+import './ActionButton.scss'
 
 type TActions = 'add' | 'edit' | 'check' | 'delete' | 'complete'
 interface IActionButton {
+    className?: string
+    text?: string
     actionHandler: MouseEventHandler<HTMLElement>
     type: TActions
 }
-function ActionButton({actionHandler, type}: IActionButton) {
+function ActionButton({className, text, actionHandler, type}: IActionButton) {
 
     const getActionIcon = (type: TActions) => {
         switch (type) {
@@ -22,8 +24,10 @@ function ActionButton({actionHandler, type}: IActionButton) {
 
     return (
         <Button
+            className={`action-button ${className && className}`}
             onClick={actionHandler}
         >
+            {text}
             {getActionIcon(type)}
         </Button>
     )

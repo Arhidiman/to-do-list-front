@@ -15,7 +15,8 @@ export interface IDoneTodoStore {
     deleteTodo: (_id: string) => void,
     createDoneTodo: (text: string) => void,
     getAllDoneTodos: () => void,
-    deleteDoneTodoById: (_id: string) => void
+    deleteDoneTodoById: (_id: string) => void,
+    deleteAllDoneTodos: () => void
 }
 
 export const useDoneToDoStore = create(devtools<IDoneTodoStore>((set) => ({
@@ -70,5 +71,23 @@ export const useDoneToDoStore = create(devtools<IDoneTodoStore>((set) => ({
                 })
             }
         }
-    }
+    },
+    deleteAllDoneTodos: async () => {
+        try {
+            const data = await axios.delete(BASE_URL+DONE_TODOS_URL)
+            set({
+                doneTodos: []
+            })
+            notification.success({
+                message: data.data
+            })
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                notification.error({
+                    message: error.message
+                })
+            }
+        }
+
+    },
 })))
