@@ -5,7 +5,7 @@ import type {TToDoItem} from "@/modules/CurrentTasks/store/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import './ToDoItem.scss'
 
-function ToDoItem({_id, text, editMode}: TToDoItem) {
+function ToDoItem({_id, text, editMode, confirmDeletion}: TToDoItem) {
 
     const {
         setInputItemText,
@@ -43,7 +43,7 @@ function ToDoItem({_id, text, editMode}: TToDoItem) {
                 <div className='task-actions'>
                     <ActionButton actionHandler={() => completeTodo(_id)} type='complete'/>
                     <ActionButton actionHandler={getActionHandler(editMode)} type={getActionType(editMode)}/>
-                    <ActionButton actionHandler={deleteToDoItem} type='delete'/>
+                    <ActionButton actionHandler={confirmDeletion} type='delete'/>
                 </div>
         </div>
     )

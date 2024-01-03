@@ -1,11 +1,11 @@
 import {PlusOutlined, EditOutlined, CheckOutlined, DeleteOutlined, ArrowDownOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import {MouseEventHandler} from "react";
+import {Dispatch, MouseEventHandler, SetStateAction} from "react";
 
 
 type TActions = 'add' | 'edit' | 'check' | 'delete' | 'complete'
 interface IActionButton {
-    actionHandler: MouseEventHandler<HTMLButtonElement>,
+    actionHandler: MouseEventHandler<HTMLButtonElement> | Dispatch<SetStateAction<boolean>>,
     type: TActions
 }
 function ActionButton({actionHandler, type}: IActionButton) {
@@ -19,6 +19,7 @@ function ActionButton({actionHandler, type}: IActionButton) {
             case 'complete': return <ArrowDownOutlined/>
         }
     }
+
     return (
         <Button
             onClick={actionHandler}

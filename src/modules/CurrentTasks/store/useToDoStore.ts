@@ -3,11 +3,13 @@ import axios from "axios";
 import {notification} from "antd";
 import {devtools} from "zustand/middleware";
 import {BASE_URL, TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
+import {Dispatch, SetStateAction} from "react";
 
 export type TToDoItem = {
-    _id: number,
+    _id: string,
     text: string,
-    editMode: boolean
+    editMode: boolean,
+    confirmDeletion?: Dispatch<SetStateAction<boolean>>
 }
 
 interface ITodoStore {
@@ -57,10 +59,13 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
                 message: 'New todo created successfully'
             })
 
-        } catch (error: any) {
-            notification.error({
-                message: error.message
-            })
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                notification.error({
+                    message: error.message
+                })
+            }
+
         }
     },
     setEditTodoMode: (_id: number) => set((state: ITodoStore) => {
@@ -88,10 +93,12 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             notification.success({
                 message: data.data
             })
-        } catch (error: any) {
-            notification.error({
-                message: error.message
-            })
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                notification.error({
+                    message: error.message
+                })
+            }
         }
 
     },
