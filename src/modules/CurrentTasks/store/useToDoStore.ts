@@ -3,41 +3,39 @@ import axios from "axios";
 import {notification} from "antd";
 import {devtools} from "zustand/middleware";
 import {BASE_URL, TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
-import {Dispatch, SetStateAction} from "react";
 
 export type TToDoItem = {
     _id: string,
     text: string,
     editMode: boolean,
-    confirmDeletion?: Dispatch<SetStateAction<boolean>>
 }
 
 interface ITodoStore {
     inputText: string,
     toDoItems: TToDoItem[] | [],
     doneTodos: TToDoItem[],
-    deleteTodo: (_id: number) => void,
+    deleteTodo: (_id: string) => void,
     setInputText: (text: string) => void
     createTodo: (inputText: string) => void,
-    setEditTodoMode: (_id: number) => void,
-    disableAndUpdateTodo: (_id: number, text: string) => void,
-    setInputItemText: (text: string, _id: number) => void,
-    completeTodo: (_id: number) => void,
+    setEditTodoMode: (_id: string) => void,
+    disableAndUpdateTodo: (_id: string, text: string) => void,
+    setInputItemText: (text: string, _id: string) => void,
+    completeTodo: (_id: string) => void,
     getAllTodos: () => void,
-    deleteTodoById: (_id: string | number) => void
+    deleteTodoById: (_id: string) => void
 }
 
 export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
     inputText: '',
     toDoItems: [],
     doneTodos: [],
-    deleteTodo: (_id: number) => set((state: ITodoStore) => (
+    deleteTodo: (_id: string) => set((state: ITodoStore) => (
         {toDoItems: state.toDoItems.filter((item: TToDoItem) => item._id !== _id)}
     )),
     setInputText: (text: string) => set(() => (
         {inputText: text}
     )),
-    setInputItemText: (text: string, _id: number) => set((state: ITodoStore) => (
+    setInputItemText: (text: string, _id: string) => set((state: ITodoStore) => (
         {
             toDoItems: state.toDoItems.map((item: TToDoItem) => (
                 item._id !== _id
@@ -68,7 +66,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
 
         }
     },
-    setEditTodoMode: (_id: number) => set((state: ITodoStore) => {
+    setEditTodoMode: (_id: string) => set((state: ITodoStore) => {
         console.log(_id)
         return {
             toDoItems: state.toDoItems.map((item: TToDoItem) => (
@@ -78,7 +76,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             ))
         }
     }),
-    disableAndUpdateTodo: async (_id: number, text: string) => {
+    disableAndUpdateTodo: async (_id: string, text: string) => {
         try {
             const data = await axios.put(BASE_URL+TODOS_URL, {_id: _id, text: text})
             set((state: ITodoStore) => {
@@ -102,7 +100,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
         }
 
     },
-    completeTodo: (_id: number) => {
+    completeTodo: (_id: string) => {
         const {deleteTodo, toDoItems} = get()
         const completedTodo = toDoItems.find((item: TToDoItem) => item._id === _id)
         set((state: ITodoStore) => (
@@ -120,7 +118,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             })
         })
     },
-    deleteTodoById: async (_id: string | number) => {
+    deleteTodoById: async (_id: string) => {
         console.log(_id)
         try {
             const data = await axios.delete(`${BASE_URL+TODOS_URL}/${_id}`)
@@ -130,12 +128,12 @@ export const useToDoStore = create(devtools<ITodoStore>((set, get) => ({
             notification.success({
                 message: data.data
             })
-        } catch (error: any) {
-            console.log(error)
-            notification.error({
-                message: error.message
-            })
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                notification.error({
+                    message: error.message
+                })
+            }
         }
-
     }
 })))

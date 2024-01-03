@@ -30,7 +30,7 @@ export function CurrentTasks() {
     )
 
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [todoId, setTodoId] = useState<string>()
+    const [todoId, setTodoId] = useState<string>('')
     const setCurrentText = (e: SyntheticEvent<HTMLInputElement>) => {
         setInputText((e.target as HTMLInputElement).value)
     }
@@ -50,7 +50,7 @@ export function CurrentTasks() {
             _id={item._id}
             text={item.text}
             editMode={item.editMode}
-            confirmDeletion={()=>confirmDeleteHandler(item._id)}
+            confirmDeletion={() => confirmDeleteHandler(item._id)}
         />
     }
 
@@ -74,7 +74,7 @@ export function CurrentTasks() {
             </div>
             <Modal
                 confirmHandler={deleteTodo}
-                cancelHanler={() => setIsModalOpen(false)}
+                cancelHandler={() => setIsModalOpen(false)}
                 title={'Подтвердите действие'}
                 isOpen={isModalOpen}
             />

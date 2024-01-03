@@ -4,18 +4,23 @@ import ActionButton from "@/UI/ActionButton/ActionButton.tsx";
 import type {TToDoItem} from "@/modules/CurrentTasks/store/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import './ToDoItem.scss'
+import {MouseEventHandler} from "react";
 
-function ToDoItem({_id, text, editMode, confirmDeletion}: TToDoItem) {
+
+type TTodoItemComponent = TToDoItem & {
+    confirmDeletion: MouseEventHandler<HTMLElement>
+}
+
+function ToDoItem({_id, text, editMode, confirmDeletion}: TTodoItemComponent) {
 
     const {
         setInputItemText,
         setEditTodoMode,
         disableAndUpdateTodo,
         completeTodo,
-        deleteTodoById
     } = useToDoStore()
 
-    const setItemText = (e: SyntheticEvent<HTMLInputElement>, _id: number) => {
+    const setItemText = (e: SyntheticEvent<HTMLInputElement>, _id: string) => {
         setInputItemText((e.target as HTMLInputElement).value, _id)
     }
 
@@ -31,7 +36,6 @@ function ToDoItem({_id, text, editMode, confirmDeletion}: TToDoItem) {
             case false: return 'edit'
         }
     }
-    const deleteToDoItem = () => deleteTodoById(_id)
 
     return (
         <div key={_id} className='to-do-item'>
