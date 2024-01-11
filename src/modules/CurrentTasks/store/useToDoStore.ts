@@ -93,6 +93,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
         }
     },
     getAllTodos: async () => {
+        console.log(BASE_URL+TODOS_URL)
         const todos = await axios(BASE_URL+TODOS_URL)
         set({
             toDoItems: todos.data.map((todo: TToDoItem) => {
