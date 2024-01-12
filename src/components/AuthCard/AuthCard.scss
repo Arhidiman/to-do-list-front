@@ -1,0 +1,22 @@
+.auth-card {
+  &-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .ant-form-item-control-input-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .input {
+    width: 350px;
+  }
+  .auth-message {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+}
