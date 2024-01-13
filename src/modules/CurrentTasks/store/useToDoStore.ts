@@ -1,7 +1,7 @@
 import {create} from 'zustand'
+import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
-import {devtools} from "zustand/middleware";
 import {TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
 import {BASE_URL} from "@/baseUrl.ts";
 
