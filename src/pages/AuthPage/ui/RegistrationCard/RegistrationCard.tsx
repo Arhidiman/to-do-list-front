@@ -1,14 +1,16 @@
 import {Card, Form, Input, Button} from "antd";
 import {useAuthPageStore} from "@/pages/AuthPage/store/useAuthPageStore.ts";
-import './AuthCard.scss'
-import {SyntheticEvent} from "react";
-export const AuthCard = () =>  {
+import type {SyntheticEvent} from "react";
+import './RegistrationCard.scss'
+
+
+export const RegistrationCard = () =>  {
 
     const {
         switchAuthReg,
         setUserName,
         setUserPassword,
-        signInNewUser
+        signUpNewUser
     } = useAuthPageStore()
 
     const setName = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -24,10 +26,10 @@ export const AuthCard = () =>  {
     const [form] = Form.useForm()
     const inputRules = [{ required: true, message: 'Это поле не может быть пустым' }]
 
-    const submitAuth = async () => {
+    const submitRegistration = async () => {
         try {
             const user = await form.validateFields()
-            signInNewUser(user)
+            signUpNewUser(user)
             console.log(user)
         } catch (error) {
             console.log(error)
@@ -35,10 +37,8 @@ export const AuthCard = () =>  {
     }
 
     return (
-
-
-        <Card className='auth-card' title='Вход'>
-            <Form className='auth-card-form' form={form}>
+        <Card className='registration-card' title='Регистрация'>
+            <Form className='registration-card-form' form={form}>
                 <Form.Item rules={inputRules} name='name'>
                     <div className='input-item' >
                         <span className="label">Имя пользователя</span>
@@ -51,13 +51,13 @@ export const AuthCard = () =>  {
                         <Input className='input' placeholder='Пароль' onChange={setPassword}/>
                     </div>
                 </Form.Item>
-                <Button className='auth-button' type='primary' onClick={submitAuth}>
-                    Войти
+                <Button className='registration-button' type='primary' onClick={submitRegistration}>
+                    Зарегистрироваться
                 </Button>
             </Form>
             <div className='auth-message'>
-                <span>Нет аккаунта?</span>
-                <Button type='primary' onClick={switchAuthReg}>Зарегистрироваться</Button>
+                <span>Уже зарегистрированы?</span>
+                <Button type='primary' onClick={switchAuthReg}>Войти</Button>
             </div>
         </Card>
     )

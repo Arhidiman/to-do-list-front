@@ -1,6 +1,6 @@
 
 import {useEffect} from "react";
-import DoneToDo from "@/pages/AuthPage/ui/DoneToDo/DoneToDo.tsx"
+import DoneToDo from "@/components/DoneToDo/DoneToDo.tsx"
 import ActionButton from "@/UI/ActionButton/ActionButton.tsx";
 import {useDoneToDoStore} from "@/modules/DoneTasks/store/useDoneTodoStore.ts";
 import type {TDoneTodoItem} from "@/modules/DoneTasks/store/useDoneTodoStore.ts";

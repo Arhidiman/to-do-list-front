@@ -9,9 +9,11 @@ export interface IAuthPageStore {
     isAuth: boolean,
     isSignedIn: boolean,
     currentUser: IUser,
-    switchAuthReg: () => void
-    signUpNewUser: (user: IUser) => void
-    setUserName: (name: string) => void
+    switchAuthReg: () => void,
+    signUpNewUser: (user: IUser) => void,
+    signInNewUser: (user: IUser) => void,
+    setUserName: (name: string) => void,
+    setUserPassword: (name: string) => void
 }
 
 interface IUser {
@@ -35,7 +37,25 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
 
         } catch (error) {
             if(axios.isAxiosError(error)) {
-                notification.success({
+                notification.error({
+                    message: error.message
+                })
+            }
+        }
+        return {
+            isSignedIn: true
+        }
+    },
+    signInNewUser: async (user: IUser) => {
+        try {
+            await axios.get(BASE_URL+USERS_URL, {params: user})
+            notification.success({
+                message: 'User successfully signed in'
+            })
+
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                notification.error({
                     message: error.message
                 })
             }
@@ -49,6 +69,13 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
         currentUser: {
             ...state.currentUser,
             name
+        }
+    })),
+    setUserPassword: (password: string) => set((state: IAuthPageStore) => ({
+        ...state,
+        currentUser: {
+            ...state.currentUser,
+            password
         }
     }))
 })))

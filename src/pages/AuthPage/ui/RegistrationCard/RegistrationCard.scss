@@ -4,15 +4,13 @@
     flex-direction: column;
     margin-bottom: 20px;
   }
-  .ant-form-item-control-input-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-  }
   .input {
-    width: 350px;
+    width: 400px;
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px
+    }
   }
   .auth-message {
     display: flex;
