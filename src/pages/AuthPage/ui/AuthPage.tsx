@@ -1,5 +1,5 @@
 import {RegistrationCard} from "@/components/RegistrationCard/RegistrationCard.tsx";
-import {AuthCard} from "@/components/AuthCard/AuthCard.tsx";
+import {AuthCard} from "@/pages/AuthPage/ui/AuthCard/AuthCard.tsx";
 import {useAuthPageStore} from "@/pages/AuthPage/store/useAuthPageStore.ts";
 
 export const AuthPage = () =>  {
