@@ -3,7 +3,7 @@ import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
 import {BASE_URL} from "@/common/constants/baseUrl.ts";
-import {USERS_URL} from "@/pages/AuthPage/constants/urls.ts";
+import {USERS_URL, USER_SIGN_IN_URL} from "@/pages/AuthPage/constants/urls.ts";
 import type {NavigateFunction} from "react-router-dom";
 import {routes} from "@/common/constants/routes.ts";
 import {saveToLocalStorage} from "@/common/lib/saveToLocalStorage.ts";
@@ -54,7 +54,7 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
     },
     signIn: async (user: IUser, navigate: NavigateFunction) => {
         try {
-            const response = await axios.get(BASE_URL+USERS_URL, {params: user})
+            const response = await axios.post(BASE_URL+USER_SIGN_IN_URL, user)
             saveToLocalStorage('name', response.data.name)
             saveToLocalStorage('_id', response.data._id)
             navigate(routes.todos)
@@ -64,7 +64,7 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
         } catch (error) {
             if(axios.isAxiosError(error)) {
                 notification.error({
-                    message: error.message
+                    message: error.response && error.response.data
                 })
             }
         }
