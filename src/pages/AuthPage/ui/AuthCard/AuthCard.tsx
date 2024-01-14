@@ -1,14 +1,16 @@
 import {Card, Form, Input, Button} from "antd";
 import {useAuthPageStore} from "@/pages/AuthPage/store/useAuthPageStore.ts";
-import './AuthCard.scss'
+import {useNavigate} from "react-router-dom";
 import {SyntheticEvent} from "react";
+import './AuthCard.scss'
+
 export const AuthCard = () =>  {
 
     const {
         switchAuthReg,
         setUserName,
         setUserPassword,
-        signInNewUser
+        signIn
     } = useAuthPageStore()
 
     const setName = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -27,7 +29,7 @@ export const AuthCard = () =>  {
     const submitAuth = async () => {
         try {
             const user = await form.validateFields()
-            signInNewUser(user)
+            signIn(user)
             console.log(user)
         } catch (error) {
             console.log(error)
@@ -35,8 +37,6 @@ export const AuthCard = () =>  {
     }
 
     return (
-
-
         <Card className='auth-card' title='Вход'>
             <Form className='auth-card-form' form={form}>
                 <Form.Item rules={inputRules} name='name'>

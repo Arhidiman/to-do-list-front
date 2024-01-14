@@ -2,8 +2,9 @@ import {create} from 'zustand'
 import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
-import {BASE_URL} from "@/baseUrl.ts";
+import {BASE_URL} from "@/constants/baseUrl.ts";
 import {USERS_URL} from "@/pages/AuthPage/constants/urls.ts";
+import {routes} from "@/constants/routes.ts";
 
 export interface IAuthPageStore {
     isAuth: boolean,
@@ -11,7 +12,7 @@ export interface IAuthPageStore {
     currentUser: IUser,
     switchAuthReg: () => void,
     signUpNewUser: (user: IUser) => void,
-    signInNewUser: (user: IUser) => void,
+    signIn: (user: IUser) => void,
     setUserName: (name: string) => void,
     setUserPassword: (name: string) => void
 }
@@ -46,13 +47,14 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
             isSignedIn: true
         }
     },
-    signInNewUser: async (user: IUser) => {
+    signIn: async (user: IUser) => {
         try {
-            await axios.get(BASE_URL+USERS_URL, {params: user})
+            const response = await axios.get(BASE_URL+USERS_URL, {params: user})
+            console.log(response)
+            window.location.href = 'http://localhost:5173/todos'
             notification.success({
                 message: 'User successfully signed in'
             })
-
         } catch (error) {
             if(axios.isAxiosError(error)) {
                 notification.error({

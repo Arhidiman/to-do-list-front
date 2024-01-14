@@ -1,14 +1,11 @@
 
-import {TodoPage} from "@/pages/TodoPage";
-import {AuthPage} from "@/pages/AuthPage";
+import {AppRouter} from "@/AppRouter/AppRouter.tsx";
+
 import './App.css'
 
 function App() {
     return (
-         <>
-             {/*<TodoPage/>*/}
-             <AuthPage/>
-         </>
+        <AppRouter/>
     )
 }
 

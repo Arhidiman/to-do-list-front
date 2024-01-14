@@ -3,7 +3,7 @@ import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
 import {TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
-import {BASE_URL} from "@/baseUrl.ts";
+import {BASE_URL} from "@/constants/baseUrl.ts";
 
 export type TToDoItem = {
     _id: string,
