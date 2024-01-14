@@ -2,7 +2,7 @@ import {create} from 'zustand'
 import axios from "axios";
 import {notification} from "antd";
 import {devtools} from "zustand/middleware";
-import {BASE_URL} from "@/constants/baseUrl.ts";
+import {BASE_URL} from "@/common/constants/baseUrl.ts";
 import {DONE_TODOS_URL} from "@/modules/DoneTasks/constants/urls.ts";
 
 export type TDoneTodoItem = {

@@ -2,7 +2,7 @@ import {Route, Routes} from "react-router-dom"
 import {BrowserRouter as Router} from "react-router-dom";
 import {AuthPage} from "@/pages/AuthPage";
 import {TodoPage} from "@/pages/TodoPage";
-import {routes} from "@/constants/routes.ts";
+import {routes} from "@/common/constants/routes.ts";
 
 export const AppRouter = () => {
     return (

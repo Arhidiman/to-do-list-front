@@ -2,9 +2,10 @@ import {create} from 'zustand'
 import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
-import {BASE_URL} from "@/constants/baseUrl.ts";
+import {BASE_URL} from "@/common/constants/baseUrl.ts";
 import {USERS_URL} from "@/pages/AuthPage/constants/urls.ts";
-import {routes} from "@/constants/routes.ts";
+import type {NavigateFunction} from "react-router-dom";
+import {routes} from "@/common/constants/routes.ts";
 
 export interface IAuthPageStore {
     isAuth: boolean,
@@ -12,7 +13,7 @@ export interface IAuthPageStore {
     currentUser: IUser,
     switchAuthReg: () => void,
     signUpNewUser: (user: IUser) => void,
-    signIn: (user: IUser) => void,
+    signIn: (user: IUser, navigate: NavigateFunction) => void,
     setUserName: (name: string) => void,
     setUserPassword: (name: string) => void
 }
@@ -35,7 +36,9 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
             notification.success({
                 message: 'User successfully signed up'
             })
-
+            return {
+                isSignedIn: true
+            }
         } catch (error) {
             if(axios.isAxiosError(error)) {
                 notification.error({
@@ -43,15 +46,11 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
                 })
             }
         }
-        return {
-            isSignedIn: true
-        }
     },
-    signIn: async (user: IUser) => {
+    signIn: async (user: IUser, navigate: NavigateFunction) => {
         try {
-            const response = await axios.get(BASE_URL+USERS_URL, {params: user})
-            console.log(response)
-            window.location.href = 'http://localhost:5173/todos'
+            await axios.get(BASE_URL+USERS_URL, {params: user})
+            navigate(routes.todos)
             notification.success({
                 message: 'User successfully signed in'
             })
