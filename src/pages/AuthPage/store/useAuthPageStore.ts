@@ -6,6 +6,7 @@ import {BASE_URL} from "@/common/constants/baseUrl.ts";
 import {USERS_URL} from "@/pages/AuthPage/constants/urls.ts";
 import type {NavigateFunction} from "react-router-dom";
 import {routes} from "@/common/constants/routes.ts";
+import {saveToLocalStorage} from "@/common/lib/saveToLocalStorage.ts";
 
 export interface IAuthPageStore {
     isAuth: boolean,
@@ -20,7 +21,8 @@ export interface IAuthPageStore {
 
 interface IUser {
     name: string,
-    password: string
+    password: string,
+    _id: string
 }
 
 export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
@@ -32,7 +34,10 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
     })),
     signUpNewUser: async (user: IUser) => {
         try {
-            await axios.post(BASE_URL+USERS_URL, user)
+            const response = await axios.post(BASE_URL+USERS_URL, user)
+            saveToLocalStorage('name', response.data.name)
+            saveToLocalStorage('_id', response.data._id)
+            console.log(response)
             notification.success({
                 message: 'User successfully signed up'
             })
@@ -49,7 +54,9 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
     },
     signIn: async (user: IUser, navigate: NavigateFunction) => {
         try {
-            await axios.get(BASE_URL+USERS_URL, {params: user})
+            const response = await axios.get(BASE_URL+USERS_URL, {params: user})
+            saveToLocalStorage('name', response.data.name)
+            saveToLocalStorage('_id', response.data._id)
             navigate(routes.todos)
             notification.success({
                 message: 'User successfully signed in'
