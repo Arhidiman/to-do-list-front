@@ -1,5 +1,6 @@
 import {Card, Form, Input, Button} from "antd";
 import {useAuthPageStore} from "@/pages/AuthPage/store/useAuthPageStore.ts";
+import {useNavigate} from "react-router-dom";
 import type {SyntheticEvent} from "react";
 import './RegistrationCard.scss'
 
@@ -12,6 +13,8 @@ export const RegistrationCard = () =>  {
         setUserPassword,
         signUpNewUser
     } = useAuthPageStore()
+
+    const navigate = useNavigate()
 
     const setName = (e: SyntheticEvent<HTMLInputElement>) => {
         const element = e.target as HTMLInputElement
@@ -29,7 +32,7 @@ export const RegistrationCard = () =>  {
     const submitRegistration = async () => {
         try {
             const user = await form.validateFields()
-            signUpNewUser(user)
+            signUpNewUser(user, navigate)
             console.log(user)
         } catch (error) {
             console.log(error)

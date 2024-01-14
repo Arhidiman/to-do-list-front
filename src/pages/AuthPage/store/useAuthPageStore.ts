@@ -13,7 +13,7 @@ export interface IAuthPageStore {
     isSignedIn: boolean,
     currentUser: IUser,
     switchAuthReg: () => void,
-    signUpNewUser: (user: IUser) => void,
+    signUpNewUser: (user: IUser, navigate: NavigateFunction) => void,
     signIn: (user: IUser, navigate: NavigateFunction) => void,
     setUserName: (name: string) => void,
     setUserPassword: (name: string) => void
@@ -32,11 +32,12 @@ export const useAuthPageStore = create(devtools<IAuthPageStore>((set) => ({
     switchAuthReg: () => set((state: IAuthPageStore) => ({
         isAuth: !state.isAuth
     })),
-    signUpNewUser: async (user: IUser) => {
+    signUpNewUser: async (user: IUser, navigate: NavigateFunction) => {
         try {
             const response = await axios.post(BASE_URL+USERS_URL, user)
             saveToLocalStorage('name', response.data.name)
             saveToLocalStorage('_id', response.data._id)
+            navigate(routes.todos)
             console.log(response)
             notification.success({
                 message: 'User successfully signed up'
