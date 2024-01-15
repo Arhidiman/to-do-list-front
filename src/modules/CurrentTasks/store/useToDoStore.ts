@@ -2,7 +2,7 @@ import {create} from 'zustand'
 import {devtools} from "zustand/middleware";
 import axios from "axios";
 import {notification} from "antd";
-import {TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
+import {TODOS_URL, USER_TODOS_TODOS_URL} from "@/modules/CurrentTasks/constants/urls.ts";
 import {BASE_URL} from "@/common/constants/baseUrl.ts";
 
 export type TToDoItem = {
@@ -15,11 +15,11 @@ interface ITodoStore {
     inputText: string,
     toDoItems: TToDoItem[] | [],
     setInputText: (text: string) => void
-    createTodo: (inputText: string) => void,
+    createTodo: (inputText: string, userName: string, userId: string) => void,
     setEditTodoMode: (_id: string) => void,
     disableAndUpdateTodo: (_id: string, text: string) => void,
     setInputItemText: (text: string, _id: string) => void,
-    getAllTodos: () => void,
+    getAllTodos: (userId: string) => void,
     deleteTodoById: (_id: string, message: boolean) => void
 }
 
@@ -34,13 +34,13 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
             toDoItems: state.toDoItems.map((item: TToDoItem) => (
                 item._id !== _id
                     ? item
-                    : {...item, text: text}
+                    : {...item, text}
             ))
         }
     )),
-    createTodo: async (inputText: string) => {
+    createTodo: async (inputText: string, userName: string, userId: string) => {
         try {
-            const todo = await axios.post(BASE_URL+TODOS_URL, {author: 'Dimon', text: inputText})
+            const todo = await axios.post(BASE_URL+TODOS_URL, {author: userName, text: inputText, userId})
             set((state: ITodoStore) => {
                 return {
                     toDoItems: inputText ? [...state.toDoItems, {text: inputText, _id: todo.data._id, editMode: false}] : state.toDoItems,
@@ -93,9 +93,9 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
             }
         }
     },
-    getAllTodos: async () => {
-        console.log(BASE_URL+TODOS_URL)
-        const todos = await axios(BASE_URL+TODOS_URL)
+    getAllTodos: async (userId: string) => {
+        console.log(BASE_URL+USER_TODOS_TODOS_URL)
+        const todos = await axios.get(`${BASE_URL+USER_TODOS_TODOS_URL}?userId=${userId}`)
         set({
             toDoItems: todos.data.map((todo: TToDoItem) => {
                 return {...todo, editMode: false}

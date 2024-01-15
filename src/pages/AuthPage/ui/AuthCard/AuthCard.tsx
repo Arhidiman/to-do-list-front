@@ -13,7 +13,6 @@ export const AuthCard = () =>  {
         signIn
     } = useAuthPageStore()
 
-
     const navigate = useNavigate()
     const setName = (e: SyntheticEvent<HTMLInputElement>) => {
         const element = e.target as HTMLInputElement

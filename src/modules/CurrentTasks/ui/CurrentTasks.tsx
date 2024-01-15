@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 import ToDoItem from "../../../components/ToDoItem/ToDoItem.tsx";
 import ActionButton from "@/UI/ActionButton/ActionButton.tsx";
 import Modal from "@/components/Modal/Modal.tsx";
+import {getLocalstorageItem} from "@/common/lib/getLocalstorageItem.ts";
 import type {TToDoItem} from "../store/useToDoStore.ts";
 import type {SyntheticEvent} from "react";
 import "./CurrentTasks.scss"
@@ -29,8 +30,10 @@ export function CurrentTasks() {
         }))
     )
 
+    const [userId, setUserId] = useState(getLocalstorageItem('_id'))
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [todoId, setTodoId] = useState<string>('')
+    const [userName, setUserName] = useState('')
     const setCurrentText = (e: SyntheticEvent<HTMLInputElement>) => {
         setInputText((e.target as HTMLInputElement).value)
     }
@@ -55,10 +58,13 @@ export function CurrentTasks() {
     }
 
     useEffect(() => {
-        getAllTodos()
+        setUserName(getLocalstorageItem('name'))
+        getAllTodos(userId)
     }, [])
 
-    console.log('toDoItems', toDoItems)
+    // console.log('toDoItems', toDoItems)
+    console.log('user name', userName)
+    console.log('user _id', userId)
 
     return (
         <>
@@ -67,7 +73,7 @@ export function CurrentTasks() {
                 <div className='current-tasks'>
                     <div className='current-tasks__create'>
                         <Input onChange={setCurrentText} placeholder='Введите задачу' value={inputText}/>
-                        <ActionButton actionHandler={() => createTodo(inputText)} type='add'/>
+                        <ActionButton actionHandler={() => createTodo(inputText, userName, userId)} type='add'/>
                     </div>
                     {toDoItems && toDoItems.map(toDoItem)}
                 </div>
