@@ -30,10 +30,10 @@ export function CurrentTasks() {
         }))
     )
 
-    const [userId, setUserId] = useState(getLocalstorageItem('_id'))
+    const [userId] = useState<string | null>(getLocalstorageItem('_id'))
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [todoId, setTodoId] = useState<string>('')
-    const [userName, setUserName] = useState('')
+    const [userName, setUserName] = useState<string | null>('')
     const setCurrentText = (e: SyntheticEvent<HTMLInputElement>) => {
         setInputText((e.target as HTMLInputElement).value)
     }

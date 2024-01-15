@@ -15,11 +15,11 @@ interface ITodoStore {
     inputText: string,
     toDoItems: TToDoItem[] | [],
     setInputText: (text: string) => void
-    createTodo: (inputText: string, userName: string, userId: string) => void,
+    createTodo: (inputText: string, userName: string | null, userId: string | null) => void,
     setEditTodoMode: (_id: string) => void,
     disableAndUpdateTodo: (_id: string, text: string) => void,
     setInputItemText: (text: string, _id: string) => void,
-    getAllTodos: (userId: string) => void,
+    getAllTodos: (userId: string | null) => void,
     deleteTodoById: (_id: string, message: boolean) => void
 }
 
@@ -38,7 +38,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
             ))
         }
     )),
-    createTodo: async (inputText: string, userName: string, userId: string) => {
+    createTodo: async (inputText: string, userName: string | null, userId: string | null) => {
         try {
             const todo = await axios.post(BASE_URL+TODOS_URL, {author: userName, text: inputText, userId})
             set((state: ITodoStore) => {
@@ -50,7 +50,6 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
             notification.success({
                 message: 'New todo created successfully'
             })
-
         } catch (error) {
             if(axios.isAxiosError(error)) {
                 notification.error({
@@ -93,7 +92,7 @@ export const useToDoStore = create(devtools<ITodoStore>((set) => ({
             }
         }
     },
-    getAllTodos: async (userId: string) => {
+    getAllTodos: async (userId: string | null) => {
         console.log(BASE_URL+USER_TODOS_TODOS_URL)
         const todos = await axios.get(`${BASE_URL+USER_TODOS_TODOS_URL}?userId=${userId}`)
         set({
